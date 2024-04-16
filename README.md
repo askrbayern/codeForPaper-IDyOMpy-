@@ -1,6 +1,6 @@
 Welcome to the repository for the code for the paper: IDyOMpy: a New Python Implementation for IDyOM, a Statistical Model of Musical Expectations. 
 
-This paper offers a new version of the IDyOM model, entirely re-implemented in Python and presents an innovative battery of tests to precisely compare the behavior and outcomes of our implementation to those from the original Lisp version.
+This paper offers a new version of the IDyOM model called IDyOMpy (https://github.com/GuiMarion/IDyOMpy) entirely re-implemented in Python and presents an innovative battery of tests to precisely compare the behavior and outcomes of our implementation to those from the original Lisp version.
 
 This repository share the entirety of the code and data used for those tests.
 
