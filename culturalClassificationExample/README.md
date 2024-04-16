@@ -1,0 +1,3 @@
+You can find here a simple but working example of how we generated the cultural classification figure, along with the actual lisp code ran to generate the surprises, the matlab code, the midi files, and the generate figures. 
+
+This code serves as an toy working example for the lisp case. The actual code we used in the paper for the final figures is contained in mainAnalyses/ and also allows computation for the clustering indexes.

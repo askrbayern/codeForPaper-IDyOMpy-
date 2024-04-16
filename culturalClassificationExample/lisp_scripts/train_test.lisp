@@ -1,0 +1,5 @@
+(start-idyom)
+(idyom-db:import-data :mid "midis/bach/" "TEST_DATASET" 10)
+(idyom-db:import-data :mid "midis/shanx/" "PRETRAIN_DATASET" 11)
+(idyom:idyom 10 '(cpitch onset) '(cpitch onset) :models :both :pretraining-ids '(11) :detail 3 :output-path "modelOutput/" :overwrite nil)
+(quit)
