@@ -57,11 +57,29 @@ def train_eval(trainFolder, testFolder, outName=""):
     print(ret)
 
 if len(sys.argv) == 1:
-    print("Give me a folder name!")
-    quit()
+    folder_name = "resultBenchmarkIDyOMlisp"
+    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"No folder name provided. Using default output folder: {folder_name}")
+else:
+    folder_name = sys.argv[1]
+    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+    print(f"Using user-specified output folder: {folder_name}")
 
-folderName = sys.argv[1]
+print("""
+╔════════════════════════ IDyOM Lisp Benchmark ══════════════════════╗
+║                                                                    ║
+║  Please ensure:                                                    ║
+║  1. This script is placed in the py2lispIDyOM directory            ║
+║  2. You are running it under the correct environment               ║                                    ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝
+""")
 
+# Prompt user to continue
+continue_run = input("Are you ready to proceed? (Y/N): ").lower().strip()
+if continue_run != 'y':
+    print("Execution cancelled.")
+    sys.exit(0)
 
 if not os.path.exists(folderName):
     os.makedirs(folderName)
@@ -69,6 +87,7 @@ else:
     shutil.rmtree(folderName)
     os.makedirs(folderName)
 
+print("Starting the benchmark...")
 
 train_eval("../dataset/train_shanxi/", "../dataset/bach_Pearce/", outName=folderName+"/Bach_Pearce_trained_on_Chinese_train.mat")
 
@@ -90,5 +109,4 @@ train_eval("../dataset/bach_Pearce/", "../stimuli/GregoireMcGill/midis/", outNam
 
 train_eval("../dataset/bach_Pearce/", "../stimuli/giovanni/", outName=folderName+"/eLife_trained_on_Bach_Pearce.mat")
 
-
-
+print(f"Benchmark completed. Results are saved in {folder_name}")
