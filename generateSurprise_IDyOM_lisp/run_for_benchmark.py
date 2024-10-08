@@ -5,6 +5,7 @@ import glob
 import sys
 import os
 import shutil
+
 def cross_val(folder, outName=""):
     my_experiment = IDyOMExperiment(test_dataset_path=folder)
 
@@ -56,21 +57,15 @@ def train_eval(trainFolder, testFolder, outName=""):
 
     print(ret)
 
-if len(sys.argv) == 1:
-    folder_name = "resultBenchmarkIDyOMlisp"
-    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print(f"No folder name provided. Using default output folder: {folder_name}")
-else:
-    folder_name = sys.argv[1]
-    print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print(f"Using user-specified output folder: {folder_name}")
 
 print("""
 ╔════════════════════════ IDyOM Lisp Benchmark ══════════════════════╗
 ║                                                                    ║
 ║  Please ensure:                                                    ║
-║  1. This script is placed in the py2lispIDyOM directory            ║
-║  2. You are running it under the correct environment               ║                                    ║
+║  1. This script is in the py2lispIDyOM directory with parser.py    ║
+║  2. py2lispIDyOM is cloned under codeForPaper-IDyOMpy/             ║
+║  3. You are running it under the correct environment               ║
+║  4. You have the correct dependencies installed                    ║
 ║                                                                    ║
 ╚════════════════════════════════════════════════════════════════════╝
 """)
@@ -81,32 +76,32 @@ if continue_run != 'y':
     print("Execution cancelled.")
     sys.exit(0)
 
-if not os.path.exists(folderName):
-    os.makedirs(folderName)
+if not os.path.exists("../benchmark_results/lisp"):
+    os.makedirs("../benchmark_results/lisp")
 else:
-    shutil.rmtree(folderName)
-    os.makedirs(folderName)
+    shutil.rmtree("../benchmark_results/lisp")
+    os.makedirs("../benchmark_results/lisp")
 
 print("Starting the benchmark...")
 
-train_eval("../dataset/train_shanxi/", "../dataset/bach_Pearce/", outName=folderName+"/Bach_Pearce_trained_on_Chinese_train.mat")
+train_eval("../dataset/train_shanxi/", "../dataset/bach_Pearce/", outName="../benchmark_results/lisp/Bach_Pearce_trained_on_Chinese_train.mat")
 
-cross_val("../dataset/bach_Pearce/", outName=folderName+"/Bach_Pearce_cross_eval.mat")
+cross_val("../dataset/bach_Pearce/", outName="../benchmark_results/lisp/Bach_Pearce_cross_eval.mat")
 
-cross_val("../dataset/train_shanxi/", outName=folderName+"/Chinese_train_cross_val.mat")
+cross_val("../dataset/train_shanxi/", outName="../benchmark_results/lisp/Chinese_train_cross_val.mat")
 
-train_eval("../dataset/bach_Pearce/", "../dataset/train_shanxi/", outName=folderName+"/Chinese_train_trained_on_Bach_Pearce.mat")
+train_eval("../dataset/bach_Pearce/", "../dataset/train_shanxi/", outName="../benchmark_results/lisp/Chinese_train_trained_on_Bach_Pearce.mat")
 
-train_eval("../dataset/mixed2_for_lisp/", "../stimuli/GregoireMcGill/midis/", outName=folderName+"/Jneurosci_trained_on_mixed2.mat")
+train_eval("../dataset/mixed2_for_lisp/", "../stimuli/GregoireMcGill/midis/", outName="../benchmark_results/lisp/Jneurosci_trained_on_mixed2.mat")
 
-train_eval("../dataset/mixed2_for_lisp/", "../stimuli/giovanni/", outName=folderName+"/eLife_trained_on_mixed2.mat")
+train_eval("../dataset/mixed2_for_lisp/", "../stimuli/giovanni/", outName="../benchmark_results/lisp/eLife_trained_on_mixed2.mat")
 
-train_eval("../dataset/mixed2_for_lisp/", "../stimuli/Gold/", outName=folderName+"/Gold_trained_on_mixed2.mat")
+train_eval("../dataset/mixed2_for_lisp/", "../stimuli/Gold/", outName="../benchmark_results/lisp/Gold_trained_on_mixed2.mat")
 
-cross_val("../dataset/mixed2_for_lisp/", outName=folderName+"/Mixed2_cross_eval.mat")
+cross_val("../dataset/mixed2_for_lisp/", outName="../benchmark_results/lisp/Mixed2_cross_eval.mat")
 
-train_eval("../dataset/bach_Pearce/", "../stimuli/GregoireMcGill/midis/", outName=folderName+"/Jneurosci_trained_on_Bach_Pearce.mat")
+train_eval("../dataset/bach_Pearce/", "../stimuli/GregoireMcGill/midis/", outName="../benchmark_results/lisp/Jneurosci_trained_on_Bach_Pearce.mat")
 
-train_eval("../dataset/bach_Pearce/", "../stimuli/giovanni/", outName=folderName+"/eLife_trained_on_Bach_Pearce.mat")
+train_eval("../dataset/bach_Pearce/", "../stimuli/giovanni/", outName="../benchmark_results/lisp/eLife_trained_on_Bach_Pearce.mat")
 
-print(f"Benchmark completed. Results are saved in {folder_name}")
+print("Benchmark completed. Results are saved in ../benchmark_results/lisp")
