@@ -77,12 +77,7 @@ fi
 
 
 # avoid reporting error due to parallel processes
-if [[ -n "$WSL_DISTRO_NAME" ]]; then
-    mkdir -p .TEMP
-    echo "WSL detected, creating .TEMP folder in the current directory"
-fi
-
-mkdir -p out # avoid reporting error due to parallel processes
+mkdir -p .TEMP out
 
 # IDyOMpy
 
