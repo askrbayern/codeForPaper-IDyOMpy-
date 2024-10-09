@@ -1,12 +1,10 @@
 clear all; 
 load('liking_ratings.mat');
-load('all_vals.mat')
+% load('all_vals.mat')
+load('all_vals_w_ppm.mat')
 
-model_name = 'bg';
-model_name = 'MusicRex';
-model_name = 'approx';
-
-model_names = {'bg', 'MusicRex', 'approx'};
+% model_names = {'bg', 'MusicRex', 'approx'};
+model_names = {'bg', 'MusicRex', 'approx', 'ppm'};
 
 for model_name = model_names
     
