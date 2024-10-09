@@ -1,3 +1,17 @@
+print("""
+╔════════════════════════ IDyOM Lisp Benchmark ══════════════════════╗
+║                                                                    ║
+║  Please ensure:                                                    ║
+║  1. py2lispIDyOM is cloned under codeForPaper-IDyOMpy/             ║
+║  2. This file and parser.py are placed under py2lispIDyOM/         ║
+║  3. lisp and piy2lispIDyOM are installed                           ║
+║  4. Correct environment is activated                               ║
+║  5. The current experiment_history folder under py2lispIDyOM       ║
+║     will be deleted if it exists                                   ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝
+""")
+
 import py2lispIDyOM as py2lispIDyOM
 from py2lispIDyOM.run import IDyOMExperiment
 import parser
@@ -17,8 +31,13 @@ def cross_val(folder, outName=""):
                                  ltmo_order_bound=20, 
                                  stmo_order_bound=20)
     ret = my_experiment.run()
-    where_is_the_file = ret+"/experiment_output_data_folder/"
-    file_names = glob.glob(where_is_the_file+"*.dat")
+    # where_is_the_file = ret+"/experiment_output_data_folder/"
+
+
+    where_is_the_file = "experiment_history/"
+    file_names = glob.glob(os.path.join(where_is_the_file, "**", "*.dat"), recursive=True)
+
+    # file_names = glob.glob(where_is_the_file+"*.dat")
 
     if len(file_names) != 1:
         print("It's strange, there is "+str(len(file_names)) + " in the out folder.. I cant do anything...")
@@ -27,10 +46,13 @@ def cross_val(folder, outName=""):
 
 
     parser.save_IC_Entropy(file_name, file_out=outName)
+    print(f"Finished processing. Output saved to: {outName}")
+    # remove the whole experiment history folder
+    shutil.rmtree(where_is_the_file)
 
 def train_eval(trainFolder, testFolder, outName=""):
-    print(trainFolder)
-    print(testFolder)
+    # print(trainFolder)
+    # print(testFolder)
     my_experiment = IDyOMExperiment(test_dataset_path=testFolder,
                                     pretrain_dataset_path=trainFolder)
 
@@ -41,9 +63,13 @@ def train_eval(trainFolder, testFolder, outName=""):
                                  ltmo_order_bound=20, 
                                  stmo_order_bound=20)
     ret = my_experiment.run()
-    print(ret)
-    where_is_the_file = ret+"experiment_output_data_folder/"
-    file_names = glob.glob(where_is_the_file+"*.dat")
+    # print(ret) # archived code? it returns a zero
+ 
+    # where_is_the_file = ret+"experiment_output_data_folder/"
+    # file_names = glob.glob(where_is_the_file+"*.dat")
+
+    where_is_the_file = "experiment_history/"
+    file_names = glob.glob(os.path.join(where_is_the_file, "**", "*.dat"), recursive=True)
 
     if len(file_names) != 1:
         print("It's strange, there is "+str(len(file_names)) + " in the out folder.. I cant do anything...")
@@ -56,21 +82,15 @@ def train_eval(trainFolder, testFolder, outName=""):
     parser.save_IC_Entropy(file_name, file_out=outName)
 
     print(ret)
+    print(f"Finished processing. Output saved to: {outName}")
+    # remove the whole experiment history folder
+    shutil.rmtree(where_is_the_file)
 
 
-print("""
-╔════════════════════════ IDyOM Lisp Benchmark ══════════════════════╗
-║                                                                    ║
-║  Please ensure:                                                    ║
-║  1. This script is in the py2lispIDyOM directory with parser.py    ║
-║  2. py2lispIDyOM is cloned under codeForPaper-IDyOMpy/             ║
-║  3. You are running it under the correct environment               ║
-║  4. You have the correct dependencies installed                    ║
-║                                                                    ║
-╚════════════════════════════════════════════════════════════════════╝
-""")
 
-# Prompt user to continue
+
+
+# Main code
 continue_run = input("Are you ready to proceed? (Y/N): ").lower().strip()
 if continue_run != 'y':
     print("Execution cancelled.")
@@ -83,6 +103,11 @@ else:
     os.makedirs("../benchmark_results/lisp")
 
 print("Starting the benchmark...")
+
+if os.path.exists("experiment_history"):
+    shutil.rmtree("experiment_history")
+    print("Deleted existing experiment_history folder.")
+
 
 train_eval("../dataset/train_shanxi/", "../dataset/bach_Pearce/", outName="../benchmark_results/lisp/Bach_Pearce_trained_on_Chinese_train.mat")
 
