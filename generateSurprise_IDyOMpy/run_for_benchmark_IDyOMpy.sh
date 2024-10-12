@@ -75,9 +75,17 @@ else
     echo "No trained models found in the 'models' directory."
 fi
 
-
 # avoid reporting error due to parallel processes
-mkdir -p .TEMP out
+if ! mkdir -p .TEMP out; then
+    echo "Error: Failed to create .TEMP and out directories. Exiting."
+    exit 1
+fi
+
+# create the folders for the benchmark results
+if ! mkdir -p "../benchmark_results/idyompy" "../benchmark_results/idyompy_ppm"; then
+    echo "Error: Failed to create benchmark results directories. Exiting."
+    exit 1
+fi
 
 # IDyOMpy
 
@@ -121,12 +129,6 @@ wait
 
 python3 App.py -c ../dataset/bach_Pearce/ &
 
-python3 App.py -c ../dataset/train_shanxi/ &
-
-python3 App.py -c ../dataset/mixed2/ &
-
-python3 App.py -e ../dataset/bach_Pearce/ &
-
 yes N | python3 App.py -t ../dataset/mixed2/ -s ../stimuli/giovanni/ &
 
 yes N | python3 App.py -t ../dataset/mixed2/ -s ../stimuli/Gold/ &
@@ -137,15 +139,28 @@ yes N | python3 App.py -t ../dataset/bach_Pearce/ -s ../stimuli/giovanni/ &
 
 wait
 
-echo "Computations done, we move the files..."
+cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval.mat
 
-mkdir -p "../benchmark_results/idyompy" "../benchmark_results/idyompy_ppm"
+wait
+
+python3 App.py -c ../dataset/bach_Pearce/ -g 1 & # cant be put together with the above -c bach_Pearce -g 0 (default)
+
+python3 App.py -e ../dataset/bach_Pearce/ &
+
+python3 App.py -c ../dataset/train_shanxi/ &
+
+python3 App.py -c ../dataset/mixed2/ &
+
+wait
+
+echo "We copy the results to the benchmark_results folder..."
 
 cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_trained_on_Chinese_train.mat
 cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Bach_Pearce_trained_on_Chinese_train.mat
 
-cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval.mat
+# cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval.mat
 cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Bach_Pearce_cross_eval.mat
+cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval_genuineEntropy.mat
 
 cp out/train_shanxi/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Chinese_train_cross_val.mat
 cp out/train_shanxi/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Chinese_train_cross_val.mat
