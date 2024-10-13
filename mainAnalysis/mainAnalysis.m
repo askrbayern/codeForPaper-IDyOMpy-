@@ -5,7 +5,6 @@ clc;
 folder_IDyOMpy = "forBenchmark_idyompy";
 folder_IDyOMLisp = "forBenchmark_lisp";
 folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm";
-folder_Genuine = "genuine";
 
 %%
 cd ..
@@ -14,7 +13,7 @@ cd codeForPaper-IDyOMpy-
 
 %% Load all the files 
 
-%IDyOMpy
+% IDyOMpy
 Cc_py = load(folder_IDyOMpy + "/Chinese_train_cross_val.mat");
 Cb_py = load(folder_IDyOMpy + "/Chinese_train_trained_on_Bach_Pearce.mat");
 Bc_py = load(folder_IDyOMpy + "/Bach_Pearce_cross_eval.mat");
@@ -29,7 +28,7 @@ if ~exist(fullfile(folder_IDyOMpy, "evolution_Bach_Pearce.mat"), 'file') || ...
     return;
 end
 
-%IDyOM Lisp
+% IDyOM Lisp
 Cc_lisp = load(folder_IDyOMLisp + "/Chinese_train_cross_val.mat");
 Cb_lisp = load(folder_IDyOMLisp + "/Chinese_train_trained_on_Bach_Pearce.mat");
 Bc_lisp = load(folder_IDyOMLisp + "/Bach_Pearce_cross_eval.mat");
@@ -43,7 +42,7 @@ if ~exist(fullfile(folder_IDyOMLisp, "Jneurosci_trained_on_mixed2.mat"), 'file')
     return;
 end
 
-%IDyOMpy PPM
+% IDyOMpy PPM
 Cc_ppm = load(folder_IDyOMpy_PPM + "/Chinese_train_cross_val.mat");
 Cb_ppm = load(folder_IDyOMpy_PPM + "/Chinese_train_trained_on_Bach_Pearce.mat");
 Bc_ppm = load(folder_IDyOMpy_PPM + "/Bach_Pearce_cross_eval.mat");
@@ -58,11 +57,34 @@ if ~exist(fullfile(folder_IDyOMpy_PPM, "Jneurosci_trained_on_mixed2.mat"), 'file
 end
 
 
-%Genuine
-b_genuine_0 = load(folder_Genuine + "/g0.mat");
-b_genuine_1 = load(folder_Genuine + "/g1.mat");
+% Genuine
+b_genuine_0 = Cc_py;
+b_genuine_1 = load(folder_IDyOMpy + "/Bach_Pearce_cross_eval_genuineEntropy.mat");
 
-%% Genuine
+%% Sort and clean
+% 
+% Cc_py = sort_and_clean_struct(Cc_py);
+% Cb_py = sort_and_clean_struct(Cb_py);
+% Bc_py = sort_and_clean_struct(Bc_py);
+% Bch_py = sort_and_clean_struct(Bch_py);
+% Mm_py = sort_and_clean_struct(Mm_py);
+% 
+% Cc_lisp = sort_and_clean_struct(Cc_lisp);
+% Cb_lisp = sort_and_clean_struct(Cb_lisp);
+% Bc_lisp = sort_and_clean_struct(Bc_lisp);
+% Bch_lisp = sort_and_clean_struct(Bch_lisp);
+% Mm_lisp = sort_and_clean_struct(Mm_lisp);
+% 
+% Cc_ppm = sort_and_clean_struct(Cc_ppm);
+% Cb_ppm = sort_and_clean_struct(Cb_ppm);
+% Bc_ppm = sort_and_clean_struct(Bc_ppm);
+% Bch_ppm = sort_and_clean_struct(Bch_ppm);
+% Mm_ppm = sort_and_clean_struct(Mm_ppm);
+% 
+% b_genuine_0 = sort_and_clean_struct(b_genuine_0);
+% b_genuine_1 = sort_and_clean_struct(b_genuine_1);
+
+%% Compare Genuine and Approximated
 g0_fields = fieldnames(b_genuine_0);
 g1_fields = fieldnames(b_genuine_1);
 common_fields = intersect(g0_fields, g1_fields);
@@ -108,9 +130,9 @@ figure;
 scatter(reshape(surprise_python,1,[]), reshape(surprise_lisp,1,[]), 1, 'MarkerEdgeColor',"#64add3", 'MarkerFaceColor',"#e8b6d2"); hold on; 
 mdl = fitlm(reshape(surprise_python,1,[]), reshape(surprise_lisp,1,[]));
 plot(mdl);
-xlabel("IC (IDyOMpy");
+xlabel("IC (IDyOMpy)");
 ylabel("IC (IDyOM Lisp)");
-title("Information Content")
+title("Information Content: Python vs Lisp")
 xlim([0, 20])
 ylim([0, 20])
 
@@ -282,7 +304,7 @@ load(folder_IDyOMpy+"/evolution_Bach_Pearce.mat")
 
 figure;
 errorbar(note_counter, mean(matrix, 2), std(matrix, [], 2)/sqrt(size(matrix, 2)), 'Color','#64ADD3')
-title("Evolution of the mean IC during Learning ")
+title("Evolution of the mean IC during Learning")
 ylabel("Mean IC (generlization error)")
 xlabel("Learning (in notes)")
 yline(mean(getGeneralizationError(Bc_lisp)), 'Color','#E8B6D2')
@@ -291,12 +313,18 @@ legend("IDyOMpy", "IDyOM Lisp")
 
 %% Cultural Clustering
 
+disp("py")
 score_idyompy = clustering_eval(Cc_py, Cb_py, Bc_py, Bch_py, 'Cultural Clustering for IDyOMpy');
+disp("")
+disp("lisp")
 score_idyom_lisp= clustering_eval(Cc_lisp, Cb_lisp, Bc_lisp, Bch_lisp, 'Cultural Clustering for IDyOM Lisp');
+disp("")
+disp("ppm")
 score_idyompy_ppm= clustering_eval(Cc_ppm, Cb_ppm, Bc_ppm, Bch_ppm, 'Cultural Clustering for IDyOMpy PPM');
-
+disp("")
 %% EEG Decoding
-%r_idyompy_JNeurosci = corrJNeurosci(folder_IDyOMpy+"/Jneurosci_trained_on_mixed2.mat");
+
+% r_idyompy_JNeurosci = corrJNeurosci(folder_IDyOMpy+"/Jneurosci_trained_on_mixed2.mat");
 idyompy_JNeurosci = load(folder_IDyOMpy + "/Jneurosci_trained_on_mixed2.mat");
 r_idyompy_JNeurosci = corrJNeurosci(idyompy_JNeurosci);
 
@@ -373,3 +401,39 @@ for i=1:20
 end
 ylabel("Pearson's correlation")
 title("JNeurosci (on mixed2)")
+
+
+
+%%
+function sorted_struct = sort_and_clean_struct(input_struct)
+    % remove info field
+    if isfield(input_struct, 'info')
+        input_struct = rmfield(input_struct, 'info');
+    end
+    % get field names
+    field_names = fieldnames(input_struct);
+    sorted_fields = sort(field_names);
+    % new struct with sorted fields
+    sorted_struct = orderfields(input_struct, sorted_fields);
+    % remove fields with infinite values
+    is_finite = structfun(@(x) all(isfinite(x(:))), sorted_struct);
+    sorted_struct = rmfield(sorted_struct, sorted_fields(~is_finite));
+end
+
+
+function print_non_matched_fields(lisp_fields, ppm_fields, py_fields, common_fields)
+    all_fields = unique([lisp_fields; ppm_fields; py_fields]);
+    non_matched = setdiff(all_fields, common_fields);
+    if ~isempty(non_matched)
+        fprintf('Error: there are unmatched fields:\n');
+        for i = 1:length(non_matched)
+            field = non_matched{i};
+            in_lisp = ismember(field, lisp_fields);
+            in_ppm = ismember(field, ppm_fields);
+            in_py = ismember(field, py_fields);
+            fprintf('%s: LISP: %d, PPM: %d, Py: %d\n', field, in_lisp, in_ppm, in_py);
+        end
+    else
+        fprintf('All fields are matched.\n');
+    end
+end
