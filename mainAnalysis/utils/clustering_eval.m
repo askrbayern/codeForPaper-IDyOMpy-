@@ -40,11 +40,11 @@ function results = clustering_eval(Cc, Cb, Bc, Bch, model_name)
 
     scatter(Chinese_songs(:,1), Chinese_songs(:,2)); hold on; 
     scatter(Bach_songs(:,1), Bach_songs(:,2));
-    plot([-100 100], [-100, 100]); 
+    equality_line = plot([-100 100], [-100, 100]);
     xlim([-4 6]);
     ylim([-4 6]);
 
-    legend("Chinese Songs", "Bach Chorals")
+    legend("Chinese Songs", "Bach Chorals", "Equality Line")
     xlabel("Chinese Model (IC)")
     ylabel("Bach Model (IC)")
     title("Cultural Distance: "+ model_name)

@@ -313,15 +313,33 @@ legend("IDyOMpy", "IDyOM Lisp")
 
 %% Cultural Clustering
 
-disp("py")
-score_idyompy = clustering_eval(Cc_py, Cb_py, Bc_py, Bch_py, 'Cultural Clustering for IDyOMpy');
-disp("")
-disp("lisp")
+score_idyompy = clustering_eval(Cc_py, Cb_py, Bc_py, Bch_py,'Cultural Clustering for IDyOMPy');
 score_idyom_lisp= clustering_eval(Cc_lisp, Cb_lisp, Bc_lisp, Bch_lisp, 'Cultural Clustering for IDyOM Lisp');
-disp("")
-disp("ppm")
-score_idyompy_ppm= clustering_eval(Cc_ppm, Cb_ppm, Bc_ppm, Bch_ppm, 'Cultural Clustering for IDyOMpy PPM');
-disp("")
+score_idyompy_ppm= clustering_eval(Cc_ppm, Cb_ppm, Bc_ppm, Bch_ppm, 'Cultural Clustering for IDyOMPy PPM');
+
+%% Show Cultural Clustering table
+results_table = table();
+results_table = [results_table; {score_idyompy.Inter_Cultural_Distance, score_idyompy.Intra_Cultural_Distance_A, score_idyompy.Intra_Cultural_Distance_B, score_idyompy.Clustering_Index}];
+results_table = [results_table; {score_idyom_lisp.Inter_Cultural_Distance, score_idyom_lisp.Intra_Cultural_Distance_A, score_idyom_lisp.Intra_Cultural_Distance_B, score_idyom_lisp.Clustering_Index}];
+results_table = [results_table; {score_idyompy_ppm.Inter_Cultural_Distance, score_idyompy_ppm.Intra_Cultural_Distance_A, score_idyompy_ppm.Intra_Cultural_Distance_B, score_idyompy_ppm.Clustering_Index}];
+results_table.Properties.VariableNames = {'Inter-Cultural Distance', 'Intra-Cultural Distance A', 'Intra-Cultural Distance B', 'Clustering Index'};
+
+% show table
+disp(results_table);
+
+% plot
+figure('Position', [100, 100, 600, 200]);
+
+t = uitable('Data', table2cell(results_table), ...
+            'ColumnName', results_table.Properties.VariableNames, ...
+            'RowName', {'IDyOM Lisp', 'IDyOMPy', 'IDyOMPy PPM'}, ...
+            'Units', 'Normalized', ...
+            'Position', [0, 0, 1, 1]);
+
+t.ColumnWidth = {150, 150, 150, 150};
+
+title('Table 1: Cultural Classification Metrics for Both Models.');
+
 %% EEG Decoding
 
 % r_idyompy_JNeurosci = corrJNeurosci(folder_IDyOMpy+"/Jneurosci_trained_on_mixed2.mat");
