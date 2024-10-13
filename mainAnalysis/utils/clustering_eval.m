@@ -1,4 +1,4 @@
-function index = clustering_eval(Cc, Cb, Bc, Bch)
+function index = clustering_eval(Cc, Cb, Bc, Bch, model_name)
     Chinese_songs = [];
     Bach_songs = [];
 
@@ -47,7 +47,7 @@ function index = clustering_eval(Cc, Cb, Bc, Bch)
     legend("Chinese Songs", "Bach Chorals")
     xlabel("Chinese Model (IC)")
     ylabel("Bach Model (IC)")
-    title("Cultural Distance")
+    title("Cultural Distance: "+ model_name)
 
     inter_cultural_distance = 0; 
     count = 0;
