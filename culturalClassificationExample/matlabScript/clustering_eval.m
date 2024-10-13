@@ -1,4 +1,4 @@
-function index = clustering_eval(Cc, Cb, Bc, Bch)
+function results = clustering_eval(Cc, Cb, Bc, Bch, model_name)
     Chinese_songs = [];
     Bach_songs = [];
 
@@ -47,7 +47,7 @@ function index = clustering_eval(Cc, Cb, Bc, Bch)
     legend("Chinese Songs", "Bach Chorals")
     xlabel("Chinese Model (IC)")
     ylabel("Bach Model (IC)")
-    title("Cultural Distance")
+    title("Cultural Distance: "+ model_name)
 
     inter_cultural_distance = 0; 
     count = 0;
@@ -89,11 +89,16 @@ function index = clustering_eval(Cc, Cb, Bc, Bch)
     end
     intra_cultural_distance_B = intra_cultural_distance_B/count;
 
+    results.Inter_Cultural_Distance = inter_cultural_distance;
+    results.Intra_Cultural_Distance_A = intra_cultural_distance_A;
+    results.Intra_Cultural_Distance_B = intra_cultural_distance_B;
+    results.Clustering_Index = inter_cultural_distance / ((intra_cultural_distance_A + intra_cultural_distance_B) / 2);
+
     disp("Inter Cultural Distance: "+ num2str(inter_cultural_distance));
     disp("Intra Cultural Distance on A: "+ num2str(intra_cultural_distance_A));
     disp("Intra Cultural Distance on B: "+ num2str(intra_cultural_distance_B));
     disp("Clustering Index: " + num2str(inter_cultural_distance/((intra_cultural_distance_A+intra_cultural_distance_B)/2)));
-    index = inter_cultural_distance/((intra_cultural_distance_A+intra_cultural_distance_B)/2);
+    % index = inter_cultural_distance/((intra_cultural_distance_A+intra_cultural_distance_B)/2);
     % Clustering index similar to Dunn index
 end
 
