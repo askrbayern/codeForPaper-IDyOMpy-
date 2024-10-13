@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# confirmations
+# remove line endings
+# sed -i 's/\r$//' run_for_benchmark_IDyOMpy.sh
 echo "
 ╔════════════════════════ IMPORTANT ════════════════════════╗
 ║                                                           ║
