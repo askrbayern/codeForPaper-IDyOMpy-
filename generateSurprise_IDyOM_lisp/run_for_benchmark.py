@@ -58,7 +58,8 @@ def train_eval(trainFolder, testFolder, outName=""):
 
     my_experiment.set_parameters(target_viewpoints=['cpitch', 'onset'],
                                  source_viewpoints=['cpitch', 'onset'],
-                                 models=':both',
+                                 models=':stm',
+                                 k=1,
                                  detail=3, 
                                  ltmo_order_bound=20, 
                                  stmo_order_bound=20)
