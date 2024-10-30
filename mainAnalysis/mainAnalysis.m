@@ -1,15 +1,21 @@
-%% 
-clear;
-clc;
-
-folder_IDyOMpy = "forBenchmark_idyompy";
-folder_IDyOMLisp = "forBenchmark_lisp";
-folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm";
-
 %%
 cd ..
 addpath(genpath('codeForPaper-IDyOMpy-'))
 cd codeForPaper-IDyOMpy-
+
+%%
+clear;
+clc;
+
+% folder_IDyOMpy = "forBenchmark_idyompy";
+folder_IDyOMLisp = "forBenchmark_lisp_both";
+% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm";
+% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_b7";
+% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
+% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
+
+folder_IDyOMpy = "forBenchmark_idyompy_geom";
+folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
 
 %% Load all the files 
 
@@ -58,8 +64,48 @@ end
 
 
 % Genuine
-b_genuine_0 = Cc_py;
+b_genuine_0 = Bc_py;
 b_genuine_1 = load(folder_IDyOMpy + "/Bach_Pearce_cross_eval_genuineEntropy.mat");
+
+%% Test plot
+chor_001_py = Bc_py.chor_001;
+chor_001_lisp = Bc_lisp.chor_001;
+chor_001_ppm = Bc_ppm.chor_001;
+
+row1_py = chor_001_py(1,:);
+row1_lisp = chor_001_lisp(1,:);
+row1_ppm = chor_001_ppm(1,:);
+
+row2_py = chor_001_py(2,:);
+row2_lisp = chor_001_lisp(2,:);
+row2_ppm = chor_001_ppm(2,:);
+
+figure('Position', [100, 100, 1200, 800]);
+
+% First subplot
+subplot(2,1,1);
+plot(row1_py, 'b-', 'LineWidth', 2, 'DisplayName', 'Python');
+hold on;
+plot(row1_lisp, 'r-', 'LineWidth', 2, 'DisplayName', 'Lisp');
+plot(row1_ppm, 'g-', 'LineWidth', 2, 'DisplayName', 'PPM');
+title('IC Comparison');
+legend('show');
+grid on;
+hold off;
+
+% Second subplot
+subplot(2,1,2);
+plot(row2_py, 'b-', 'LineWidth', 2, 'DisplayName', 'Python');
+hold on;
+plot(row2_lisp, 'r-', 'LineWidth', 2, 'DisplayName', 'Lisp');
+plot(row2_ppm, 'g-', 'LineWidth', 2, 'DisplayName', 'PPM');
+title('Entropy Comparison');
+legend('show');
+grid on;
+hold off;
+
+% Adjust spacing between subplots
+sgtitle('Comparison of Python, Lisp, and PPM Implementations');
 
 %% Sort and clean
 % 
@@ -260,8 +306,6 @@ end
 % axes
 set(gca,'xticklabel',{'Chinese Songs'; 'Bach Chorals'; 'Large Western Database'});
 legend("IDyOM Lisp", "IDyOMpy", 'IDyOMpy PPM')
-ylim([2.5 4.7]);
-yticks(2.6:0.2:4.6);
 ylabel('Mean IC (generalization error)')
 %xlabel('Session')
 title('Generalization Error on Different Datasets')
