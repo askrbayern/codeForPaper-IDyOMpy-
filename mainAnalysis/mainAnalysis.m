@@ -14,8 +14,9 @@ folder_IDyOMLisp = "forBenchmark_lisp_both";
 % folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
 % folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
 
+% folder_IDyOMpy = "forBenchmark_idyompy";
 folder_IDyOMpy = "forBenchmark_idyompy_geom";
-folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
+folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm";
 
 %% Load all the files 
 
@@ -66,46 +67,6 @@ end
 % Genuine
 b_genuine_0 = Bc_py;
 b_genuine_1 = load(folder_IDyOMpy + "/Bach_Pearce_cross_eval_genuineEntropy.mat");
-
-%% Test plot
-chor_001_py = Bc_py.chor_001;
-chor_001_lisp = Bc_lisp.chor_001;
-chor_001_ppm = Bc_ppm.chor_001;
-
-row1_py = chor_001_py(1,:);
-row1_lisp = chor_001_lisp(1,:);
-row1_ppm = chor_001_ppm(1,:);
-
-row2_py = chor_001_py(2,:);
-row2_lisp = chor_001_lisp(2,:);
-row2_ppm = chor_001_ppm(2,:);
-
-figure('Position', [100, 100, 1200, 800]);
-
-% First subplot
-subplot(2,1,1);
-plot(row1_py, 'b-', 'LineWidth', 2, 'DisplayName', 'Python');
-hold on;
-plot(row1_lisp, 'r-', 'LineWidth', 2, 'DisplayName', 'Lisp');
-plot(row1_ppm, 'g-', 'LineWidth', 2, 'DisplayName', 'PPM');
-title('IC Comparison');
-legend('show');
-grid on;
-hold off;
-
-% Second subplot
-subplot(2,1,2);
-plot(row2_py, 'b-', 'LineWidth', 2, 'DisplayName', 'Python');
-hold on;
-plot(row2_lisp, 'r-', 'LineWidth', 2, 'DisplayName', 'Lisp');
-plot(row2_ppm, 'g-', 'LineWidth', 2, 'DisplayName', 'PPM');
-title('Entropy Comparison');
-legend('show');
-grid on;
-hold off;
-
-% Adjust spacing between subplots
-sgtitle('Comparison of Python, Lisp, and PPM Implementations');
 
 %% Sort and clean
 % 
@@ -178,7 +139,9 @@ mdl = fitlm(reshape(surprise_python,1,[]), reshape(surprise_lisp,1,[]));
 plot(mdl);
 xlabel("IC (IDyOMpy)");
 ylabel("IC (IDyOM Lisp)");
-title("Information Content: Python vs Lisp")
+legend('off')
+title("Paired comparison of IC from IDyOMpy and IDyOM Lisp")
+
 xlim([0, 20])
 ylim([0, 20])
 
@@ -188,7 +151,8 @@ mdl = fitlm(reshape(entropy_python,1,[]), reshape(entropy_lisp,1,[]));
 plot(mdl);
 xlabel("Entropy (IDyOMpy)");
 ylabel("Entropy (IDyOM Lisp)");
-title("Entropy")
+legend('off')
+title("Paired comparison of Entropy from IDyOMpy and IDyOM Lisp")
 
 disp("Corr IC: " + num2str(corr(surprise_python', surprise_lisp')))
 disp("Corr Entropy: " + num2str(corr(entropy_python', entropy_lisp')))
@@ -200,7 +164,8 @@ mdl = fitlm(reshape(surprise_python_ppm,1,[]), reshape(surprise_python,1,[]));
 plot(mdl);
 xlabel("IC (IDyOMpy PPM)");
 ylabel("IC (IDyOMpy)");
-title("Information Content: PPM vs Python")
+legend('off')
+title("Paired comparison of IC from IDyOMpy PPM and IDyOMpy")
 xlim([0, 20])
 ylim([0, 20])
 
@@ -210,7 +175,8 @@ mdl = fitlm(reshape(entropy_python_ppm,1,[]), reshape(entropy_python,1,[]));
 plot(mdl);
 xlabel("Entropy (IDyOMpy PPM)");
 ylabel("Entropy (IDyOMpy)");
-title("Entropy: PPM vs Python")
+legend('off')
+title("Paired comparison of Entropy from IDyOMpy PPM and IDyOMpy")
 
 disp("Corr IC (PPM vs Python): " + num2str(corr(surprise_python_ppm', surprise_python')))
 disp("Corr Entropy (PPM vs Python): " + num2str(corr(entropy_python_ppm', entropy_python')))
@@ -222,7 +188,8 @@ mdl = fitlm(reshape(surprise_python_ppm,1,[]), reshape(surprise_lisp,1,[]));
 plot(mdl);
 xlabel("IC (IDyOMpy PPM)");
 ylabel("IC (IDyOM Lisp)");
-title("Information Content: PPM vs Lisp")
+legend('off')
+title("Paired comparison of IC from IDyOMpy PPM and IDyOM Lisp")
 xlim([0, 20])
 ylim([0, 20])
 
@@ -232,10 +199,12 @@ mdl = fitlm(reshape(entropy_python_ppm,1,[]), reshape(entropy_lisp,1,[]));
 plot(mdl);
 xlabel("Entropy (IDyOMpy PPM)");
 ylabel("Entropy (IDyOM Lisp)");
-title("Entropy: PPM vs Lisp")
+legend('off')
+title("Paired comparison of Entropy from IDyOMpy PPM and IDyOM Lisp")
 
 disp("Corr IC (PPM vs Lisp): " + num2str(corr(surprise_python_ppm', surprise_lisp')))
 disp("Corr Entropy (PPM vs Lisp): " + num2str(corr(entropy_python_ppm', entropy_lisp')))
+
 
 %% Corr IC vs ENTOPY
 
@@ -314,7 +283,47 @@ ranksum(getGeneralizationError(Cc_lisp), getGeneralizationError(Cc_py))
 ranksum(getGeneralizationError(Bc_lisp), getGeneralizationError(Bc_py))
 ranksum(getGeneralizationError(Mm_lisp), getGeneralizationError(Mm_py))
 
-%% Generalization error (Entropy)   
+%% Entropy
+y_entropy = [mean(getEntropy(Cc_lisp)) mean(getEntropy(Cc_py)) mean(getEntropy(Cc_ppm)); 
+    mean(getEntropy(Bc_lisp)) mean(getEntropy(Bc_py)) mean(getEntropy(Bc_ppm)); 
+    mean(getEntropy(Mm_lisp)) mean(getEntropy(Mm_py)) mean(getEntropy(Mm_ppm))];
+
+err_entropy = [std(getEntropy(Cc_lisp))/sqrt(length(getEntropy(Cc_lisp))) std(getEntropy(Cc_py))/sqrt(length(getEntropy(Cc_py))) std(getEntropy(Cc_ppm))/sqrt(length(getEntropy(Cc_ppm))); 
+    std(getEntropy(Bc_lisp))/sqrt(length(getEntropy(Bc_lisp))) std(getEntropy(Bc_py))/sqrt(length(getEntropy(Bc_py))) std(getEntropy(Bc_ppm))/sqrt(length(getEntropy(Bc_ppm))); 
+    std(getEntropy(Mm_lisp))/sqrt(length(getEntropy(Mm_lisp))) std(getEntropy(Mm_py))/sqrt(length(getEntropy(Mm_py))) std(getEntropy(Mm_ppm))/sqrt(length(getEntropy(Mm_ppm)))];
+
+% Plot
+figure(); 
+hb = bar(y_entropy); 
+hold on;
+
+% colors
+hb(1).FaceColor = [0.95, 0.70, 0.85];  % Pink for Lisp
+hb(2).FaceColor = [0.60, 0.75, 0.85];  % Blue for Python
+hb(3).FaceColor = [0.7, 0.9, 0.7];     % Green for PPM
+
+% error bars
+numGroups = size(y_entropy, 1);
+numBars = size(y_entropy, 2);
+groupwidth = min(0.8, numBars/(numBars + 1.5));
+
+for i = 1:numBars
+    % get x positions per group
+    x = (1:numGroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numBars);
+    % draw errorbar
+    errorbar(x, y_entropy(:,i), err_entropy(:,i), 'k', 'linestyle', 'none', 'linewidth', 1.5);
+end
+
+% axes
+set(gca,'xticklabel',{'Chinese Songs'; 'Bach Chorals'; 'Large Western Database'});
+legend("IDyOM Lisp", "IDyOMpy", 'IDyOMpy PPM')
+ylabel('Mean Entropy')
+title('Entropy Approximation on Different Datasets')
+
+% Statistical tests
+ranksum(getEntropy(Cc_lisp), getEntropy(Cc_py))
+ranksum(getEntropy(Bc_lisp), getEntropy(Bc_py))
+ranksum(getEntropy(Mm_lisp), getEntropy(Mm_py))
 % 
 % y = [mean(getGeneralizationError(Cc_lisp)) mean(getGeneralizationError(Cc_py)); mean(getGeneralizationError(Bc_lisp)) mean(getGeneralizationError(Bc_py)); mean(getGeneralizationError(Mm_lisp)) mean(getGeneralizationError(Mm_py))];  % first 3 #s are pre-test, second 3 #s are post-test
 % err = [std(getGeneralizationError(Cc_lisp))/sqrt(length(getGeneralizationError(Cc_lisp))) std(getGeneralizationError(Cc_py))/sqrt(length(getGeneralizationError(Cc_py))); std(getGeneralizationError(Bc_lisp))/sqrt(length(getGeneralizationError(Bc_lisp))) std(getGeneralizationError(Bc_py))/sqrt(length(getGeneralizationError(Bc_py))); std(getGeneralizationError(Mm_lisp))/sqrt(length(getGeneralizationError(Mm_lisp))) std(getGeneralizationError(Mm_py))/sqrt(length(getGeneralizationError(Mm_py)))];
@@ -366,7 +375,7 @@ results_table = table();
 results_table = [results_table; {score_idyompy.Inter_Cultural_Distance, score_idyompy.Intra_Cultural_Distance_A, score_idyompy.Intra_Cultural_Distance_B, score_idyompy.Clustering_Index}];
 results_table = [results_table; {score_idyom_lisp.Inter_Cultural_Distance, score_idyom_lisp.Intra_Cultural_Distance_A, score_idyom_lisp.Intra_Cultural_Distance_B, score_idyom_lisp.Clustering_Index}];
 results_table = [results_table; {score_idyompy_ppm.Inter_Cultural_Distance, score_idyompy_ppm.Intra_Cultural_Distance_A, score_idyompy_ppm.Intra_Cultural_Distance_B, score_idyompy_ppm.Clustering_Index}];
-results_table.Properties.VariableNames = {'Inter-Cultural Distance', 'Intra-Cultural Distance A', 'Intra-Cultural Distance B', 'Clustering Index'};
+results_table.Properties.VariableNames = {'Inter-Cultural Distance', 'Intra-Cultural Distance on A', 'Intra-Cultural Distance on B', 'Clustering Index'};
 
 % show table
 disp(results_table);
