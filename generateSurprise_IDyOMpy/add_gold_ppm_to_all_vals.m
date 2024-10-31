@@ -1,7 +1,10 @@
 %% Code to add dDW_ppm into existing all_vals.mat
 clear; clc;
 % this script should be placed inside forBenchmark_idyompy_ppm
-% together with the Gold_mDW_IC_Entropy.mat file
+% first, run Gold_analysis_add_ppm.ipynb (same directory)
+% to generate Gold_mDW_IC_Entropy.mat file (same directory)
+% then run this script
+
 new_ppm_file = 'Gold_mDW_IC_Entropy.mat';
 % load all vals
 folder_gold = "../../GoldReplication/";
