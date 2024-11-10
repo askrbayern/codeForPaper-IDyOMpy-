@@ -80,7 +80,7 @@ if ! mkdir -p .TEMP out; then
 fi
 
 # create the folders for the benchmark results
-if ! mkdir -p "../benchmark_results/idyompy" "../benchmark_results/idyompy_ppm"; then
+if ! mkdir -p "../benchmark_results/forBenchmark_IDyOMpy" "../benchmark_results/forBenchmark_IDyOMpy"; then
     echo "Error: Failed to create benchmark results directories. Exiting."
     exit 1
 fi
@@ -117,26 +117,26 @@ wait
 
 echo "We copy the results to the benchmark_results folder..."
 
-cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_trained_on_Chinese_train.mat
+cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Bach_Pearce_trained_on_Chinese_train.mat
 
-cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval.mat
+cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Bach_Pearce_cross_eval.mat
 
-cp out/train_shanxi/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Chinese_train_cross_val.mat
+cp out/train_shanxi/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Chinese_train_cross_val.mat
 
-cp out/train_shanxi/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Chinese_train_trained_on_Bach_Pearce.mat
+cp out/train_shanxi/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Chinese_train_trained_on_Bach_Pearce.mat
 
-cp out/GregoireMcGill/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Jneurosci_trained_on_mixed2.mat
+cp out/GregoireMcGill/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Jneurosci_trained_on_mixed2.mat
 
-cp out/giovanni/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/eLife_trained_on_mixed2.mat
+cp out/giovanni/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/eLife_trained_on_mixed2.mat
 
-cp out/Gold/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Gold_trained_on_mixed2.mat
+cp out/Gold/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Gold_trained_on_mixed2.mat
 
-cp out/mixed2/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Mixed2_cross_eval.mat
+cp out/mixed2/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Mixed2_cross_eval.mat
 
-cp out/GregoireMcGill/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Jneurosci_trained_on_bach_Pearce.mat
+cp out/GregoireMcGill/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/Jneurosci_trained_on_bach_Pearce.mat
 
-cp out/giovanni/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/eLife_trained_on_bach_Pearce.mat
+cp out/giovanni/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/forBenchmark_IDyOMpy/eLife_trained_on_bach_Pearce.mat
 
-cp out/bach_Pearce/evolution/bach_Pearce.mat ../benchmark_results/idyompy/evolution_Bach_Pearce.mat
+cp out/bach_Pearce/evolution/bach_Pearce.mat ../benchmark_results/forBenchmark_IDyOMpy/evolution_Bach_Pearce.mat
 
-echo "Benchmark completed. Results are saved in folders benchmark_results/idyompy and benchmark_results/idyompy_ppm."
+echo "Benchmark completed. Results are saved in folders benchmark_results/forBenchmark_IDyOMpy."

@@ -95,11 +95,23 @@ end
 % b_genuine_1 = sort_and_clean_struct(b_genuine_1);
 
 %% Compare Genuine and Approximated
-g0_fields = fieldnames(Bc_py);
-g1_fields = fieldnames(Bc_genuine);
+
+% dataset = 'Bach Chorals';
+% approximated = Bc_py;
+% genuine = Bc_genuine;
+
+% dataset = 'Chinese Songs';
+% approximated = Cc_py;
+% genuine = Cc_genuine;
+
+dataset = 'Large Western Dataset';
+approximated = Mm_py;
+genuine = Mm_genuine;
+
+g0_fields = fieldnames(approximated);
+g1_fields = fieldnames(genuine);
 common_fields = intersect(g0_fields, g1_fields);
 common_fields = common_fields(~strcmp(common_fields, 'info'));
-
 
 g0_all_ic = [];
 g1_all_ic = [];
@@ -107,8 +119,8 @@ g1_all_ic = [];
 for i = 1:length(common_fields)
     field = common_fields{i};
     
-    g0_data = b_genuine_0.(field)(1,:);
-    g1_data = b_genuine_1.(field)(1,:);
+    g0_data = approximated.(field)(1,:);
+    g1_data = genuine.(field)(1,:);
 
     g0_all_ic = [g0_all_ic, g0_data];
     g1_all_ic = [g1_all_ic, g1_data];
@@ -116,9 +128,9 @@ end
 
 figure('Position', [100, 100, 600, 500]);
 scatter(g0_all_ic, g1_all_ic, 5, 'filled', 'MarkerFaceAlpha', 0.1);
-title(sprintf('IC Calculation between different entropy Methods\nr = %.4f', corr(g0_all_ic', g1_all_ic')));
-xlabel('Genuine Entropy Method');
-ylabel('Entropy Approximation Method');
+title(sprintf('IC Correlation Between Different Entropy Calculation Methods \nr = %.4f', corr(g0_all_ic', g1_all_ic')));
+xlabel('Genuine Entropy Methods');
+ylabel('Approximated Entropy Methods');
 xlim([0 20]);
 ylim([0 20]);
 lsline;

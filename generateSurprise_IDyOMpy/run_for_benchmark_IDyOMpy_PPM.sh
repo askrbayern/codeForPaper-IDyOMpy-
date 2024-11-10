@@ -115,7 +115,7 @@ echo "Computations done, we move the files..."
 
 mkdir -p "../benchmark_results/forBenchmark_idyompy_ppm"
 
-cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/forBenchmark_idyompy_ppmidyompy_ppm/Bach_Pearce_trained_on_Chinese_train.mat
+cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/forBenchmark_idyompy_ppm/Bach_Pearce_trained_on_Chinese_train.mat
 
 cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/forBenchmark_idyompy_ppm/Bach_Pearce_cross_eval.mat
 
