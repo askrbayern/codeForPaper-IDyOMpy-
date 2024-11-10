@@ -137,7 +137,7 @@ lsline;
 
 fprintf('Correlation between Genuine 0 and Genuine 1: %.4f\n', corr(g0_all_ic', g1_all_ic'));
 
-%% Compare Raw IC
+%% Compare Raw IC and Entropy
 
 surprise_python = getAllofAFeature(Bc_py, 1); 
 surprise_lisp = getAllofAFeature(Bc_lisp, 1); 
@@ -169,8 +169,8 @@ ylabel("Entropy (IDyOM Lisp)");
 legend('off')
 title("Paired comparison of Entropy from IDyOMpy and IDyOM Lisp")
 
-disp("Corr IC: " + num2str(corr(surprise_python', surprise_lisp')))
-disp("Corr Entropy: " + num2str(corr(entropy_python', entropy_lisp')))
+disp("Corr IC (Python vs Lisp): " + num2str(corr(surprise_python', surprise_lisp')))
+disp("Corr Entropy (Python vs Lisp): " + num2str(corr(entropy_python', entropy_lisp')))
 
 % ====== ppm vs python ======
 figure; 
@@ -219,6 +219,87 @@ title("Paired comparison of Entropy from IDyOMpy PPM and IDyOM Lisp")
 
 disp("Corr IC (PPM vs Lisp): " + num2str(corr(surprise_python_ppm', surprise_lisp')))
 disp("Corr Entropy (PPM vs Lisp): " + num2str(corr(entropy_python_ppm', entropy_lisp')))
+
+%% Compare Raw IC and Entropy (r2)
+
+surprise_python = getAllofAFeature(Bc_py, 1); 
+surprise_lisp = getAllofAFeature(Bc_lisp, 1); 
+surprise_python_ppm = getAllofAFeature(Bc_ppm, 1); 
+
+entropy_python = getAllofAFeature(Bc_py, 2); 
+entropy_lisp = getAllofAFeature(Bc_lisp, 2); 
+entropy_python_ppm = getAllofAFeature(Bc_ppm, 2); 
+
+% ====== python vs lisp ======
+figure; 
+scatter(reshape(surprise_python,1,[]), reshape(surprise_lisp,1,[]), 1, 'MarkerEdgeColor',"#64add3", 'MarkerFaceColor',"#e8b6d2"); hold on; 
+mdl = fitlm(reshape(surprise_python,1,[]), reshape(surprise_lisp,1,[]));
+plot(mdl);
+xlabel("IC (IDyOMpy)");
+ylabel("IC (IDyOM Lisp)");
+legend('off')
+title("Paired comparison of IC from IDyOMpy and IDyOM Lisp")
+xlim([0, 20])
+ylim([0, 20])
+disp("Adjusted R² IC (Python vs Lisp): " + num2str(mdl.Rsquared.Adjusted))
+
+figure; 
+scatter(reshape(entropy_python,1,[]), reshape(entropy_lisp,1,[]), 1, 'MarkerEdgeColor',"#64add3", 'MarkerFaceColor',"#e8b6d2"); hold on; 
+mdl = fitlm(reshape(entropy_python,1,[]), reshape(entropy_lisp,1,[]));
+plot(mdl);
+xlabel("Entropy (IDyOMpy)");
+ylabel("Entropy (IDyOM Lisp)");
+legend('off')
+title("Paired comparison of Entropy from IDyOMpy and IDyOM Lisp")
+disp("Adjusted R² Entropy (Python vs Lisp): " + num2str(mdl.Rsquared.Adjusted))
+
+% ====== ppm vs python ======
+figure; 
+scatter(reshape(surprise_python_ppm,1,[]), reshape(surprise_python,1,[]), 1, 'MarkerEdgeColor',"#64add3", 'MarkerFaceColor',"#e8b6d2"); hold on; 
+mdl = fitlm(reshape(surprise_python_ppm,1,[]), reshape(surprise_python,1,[]));
+plot(mdl);
+xlabel("IC (IDyOMpy PPM)");
+ylabel("IC (IDyOMpy)");
+legend('off')
+title("Paired comparison of IC from IDyOMpy PPM and IDyOMpy")
+xlim([0, 20])
+ylim([0, 20])
+disp("Adjusted R² IC (PPM vs Python): " + num2str(mdl.Rsquared.Adjusted))
+
+figure; 
+scatter(reshape(entropy_python_ppm,1,[]), reshape(entropy_python,1,[]), 1, 'MarkerEdgeColor',"#64add3", 'MarkerFaceColor',"#e8b6d2"); hold on; 
+mdl = fitlm(reshape(entropy_python_ppm,1,[]), reshape(entropy_python,1,[]));
+plot(mdl);
+xlabel("Entropy (IDyOMpy PPM)");
+ylabel("Entropy (IDyOMpy)");
+legend('off')
+title("Paired comparison of Entropy from IDyOMpy PPM and IDyOMpy")
+
+disp("Adjusted R² Entropy (PPM vs Python): " + num2str(mdl.Rsquared.Adjusted))
+
+% ====== ppm vs lisp ======
+figure; 
+scatter(reshape(surprise_python_ppm,1,[]), reshape(surprise_lisp,1,[]), 1, 'MarkerEdgeColor',"#64add3", 'MarkerFaceColor',"#e8b6d2"); hold on; 
+mdl = fitlm(reshape(surprise_python_ppm,1,[]), reshape(surprise_lisp,1,[]));
+plot(mdl);
+xlabel("IC (IDyOMpy PPM)");
+ylabel("IC (IDyOM Lisp)");
+legend('off')
+title("Paired comparison of IC from IDyOMpy PPM and IDyOM Lisp")
+xlim([0, 20])
+ylim([0, 20])
+disp("Adjusted R² IC (PPM vs Lisp): " + num2str(mdl.Rsquared.Adjusted))
+
+figure; 
+scatter(reshape(entropy_python_ppm,1,[]), reshape(entropy_lisp,1,[]), 1, 'MarkerEdgeColor',"#64add3", 'MarkerFaceColor',"#e8b6d2"); hold on; 
+mdl = fitlm(reshape(entropy_python_ppm,1,[]), reshape(entropy_lisp,1,[]));
+plot(mdl);
+xlabel("Entropy (IDyOMpy PPM)");
+ylabel("Entropy (IDyOM Lisp)");
+legend('off')
+title("Paired comparison of Entropy from IDyOMpy PPM and IDyOM Lisp")
+
+disp("Adjusted R² Entropy (PPM vs Lisp): " + num2str(mdl.Rsquared.Adjusted))
 
 
 %% Corr IC vs ENTOPY
