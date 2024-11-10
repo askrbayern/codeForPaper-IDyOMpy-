@@ -7,16 +7,10 @@ cd codeForPaper-IDyOMpy-
 clear;
 clc;
 
-% folder_IDyOMpy = "forBenchmark_idyompy";
-folder_IDyOMLisp = "forBenchmark_lisp_both";
-% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm";
-% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_b7";
-% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
-% folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm_geom";
-
-% folder_IDyOMpy = "forBenchmark_idyompy";
-folder_IDyOMpy = "forBenchmark_idyompy_geom";
+folder_IDyOMLisp = "forBenchmark_lisp";
+folder_IDyOMpy = "forBenchmark_idyompy";
 folder_IDyOMpy_PPM = "forBenchmark_idyompy_ppm";
+folder_IDyOMpy_Genuine = "forBenchmark_idyompy_genuine";
 
 %% Load all the files 
 
@@ -63,10 +57,19 @@ if ~exist(fullfile(folder_IDyOMpy_PPM, "Jneurosci_trained_on_mixed2.mat"), 'file
     return;
 end
 
+% IDyOMpy Genuine
+Cc_genuine = load(folder_IDyOMpy_Genuine + "/Chinese_train_cross_val.mat");
+Cb_genuine = load(folder_IDyOMpy_Genuine + "/Chinese_train_trained_on_Bach_Pearce.mat");
+Bc_genuine = load(folder_IDyOMpy_Genuine + "/Bach_Pearce_cross_eval.mat");
+Bch_genuine = load(folder_IDyOMpy_Genuine + "/Bach_Pearce_trained_on_Chinese_train.mat");
+Mm_genuine = load(folder_IDyOMpy_Genuine + "/Mixed2_cross_eval.mat");
 
-% Genuine
-b_genuine_0 = Bc_py;
-b_genuine_1 = load(folder_IDyOMpy + "/Bach_Pearce_cross_eval_genuineEntropy.mat");
+% Check if exists
+if ~exist(fullfile(folder_IDyOMpy_Genuine, "Jneurosci_trained_on_mixed2.mat"), 'file') || ...
+   ~exist(fullfile(folder_IDyOMpy_Genuine, "eLife_trained_on_mixed2.mat"), 'file')
+    disp("One file doesn't exist (IDyOMpy Genuine)!!!!")
+    return;
+end
 
 %% Sort and clean
 % 
@@ -92,8 +95,8 @@ b_genuine_1 = load(folder_IDyOMpy + "/Bach_Pearce_cross_eval_genuineEntropy.mat"
 % b_genuine_1 = sort_and_clean_struct(b_genuine_1);
 
 %% Compare Genuine and Approximated
-g0_fields = fieldnames(b_genuine_0);
-g1_fields = fieldnames(b_genuine_1);
+g0_fields = fieldnames(Bc_py);
+g1_fields = fieldnames(Bc_genuine);
 common_fields = intersect(g0_fields, g1_fields);
 common_fields = common_fields(~strcmp(common_fields, 'info'));
 
@@ -369,12 +372,14 @@ legend("IDyOMpy", "IDyOM Lisp")
 score_idyompy = clustering_eval(Cc_py, Cb_py, Bc_py, Bch_py,'Cultural Clustering for IDyOMPy');
 score_idyom_lisp= clustering_eval(Cc_lisp, Cb_lisp, Bc_lisp, Bch_lisp, 'Cultural Clustering for IDyOM Lisp');
 score_idyompy_ppm= clustering_eval(Cc_ppm, Cb_ppm, Bc_ppm, Bch_ppm, 'Cultural Clustering for IDyOMPy PPM');
+score_idyompy_genuine = clustering_eval(Cc_genuine, Cb_genuine, Bc_genuine, Bch_genuine, 'Cultural Clustering for IDyOMPy Genuine');
 
 %% Show Cultural Clustering table
 results_table = table();
 results_table = [results_table; {score_idyompy.Inter_Cultural_Distance, score_idyompy.Intra_Cultural_Distance_A, score_idyompy.Intra_Cultural_Distance_B, score_idyompy.Clustering_Index}];
 results_table = [results_table; {score_idyom_lisp.Inter_Cultural_Distance, score_idyom_lisp.Intra_Cultural_Distance_A, score_idyom_lisp.Intra_Cultural_Distance_B, score_idyom_lisp.Clustering_Index}];
 results_table = [results_table; {score_idyompy_ppm.Inter_Cultural_Distance, score_idyompy_ppm.Intra_Cultural_Distance_A, score_idyompy_ppm.Intra_Cultural_Distance_B, score_idyompy_ppm.Clustering_Index}];
+results_table = [results_table; {score_idyompy_genuine.Inter_Cultural_Distance, score_idyompy_genuine.Intra_Cultural_Distance_A, score_idyompy_genuine.Intra_Cultural_Distance_B, score_idyompy_genuine.Clustering_Index}];
 results_table.Properties.VariableNames = {'Inter-Cultural Distance', 'Intra-Cultural Distance on A', 'Intra-Cultural Distance on B', 'Clustering Index'};
 
 % show table
@@ -385,7 +390,7 @@ figure('Position', [100, 100, 600, 200]);
 
 t = uitable('Data', table2cell(results_table), ...
             'ColumnName', results_table.Properties.VariableNames, ...
-            'RowName', {'IDyOM Lisp', 'IDyOMPy', 'IDyOMPy PPM'}, ...
+            'RowName', {'IDyOM Lisp', 'IDyOMPy', 'IDyOMPy PPM', 'IDyOMPy Genuine'}, ...
             'Units', 'Normalized', ...
             'Position', [0, 0, 1, 1]);
 

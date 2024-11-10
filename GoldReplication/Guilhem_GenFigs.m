@@ -1,11 +1,13 @@
 clear all; 
 load('liking_ratings.mat');
 % load('all_vals.mat')
-load('all_vals_w_ppm.mat')
+load('all_vals_paper.mat')
 
 % model_names = {'bg', 'MusicRex', 'approx'};
-model_names = {'bg', 'MusicRex', 'approx', 'ppm'};
-display_names = containers.Map({'bg', 'MusicRex', 'approx', 'ppm'}, {'Lisp', 'MusicRex', 'IDyOMpy', 'IDyOMpy PPM'});
+% display_names = containers.Map({'bg', 'MusicRex', 'approx'}, {'Lisp', 'MusicRex', 'IDyOMpy'});
+
+model_names = {'bg', 'genuine', 'approx', 'ppm'};
+display_names = containers.Map({'bg', 'genuine', 'approx', 'ppm'}, {'Lisp', 'IDyOMpy genuine', 'IDyOMpy', 'IDyOMpy PPM'});
 r_squared_values = table('Size', [0, 2], 'VariableTypes', {'string', 'double'}, 'VariableNames', {'Model', 'Adjusted_R_Squared'});
 
 

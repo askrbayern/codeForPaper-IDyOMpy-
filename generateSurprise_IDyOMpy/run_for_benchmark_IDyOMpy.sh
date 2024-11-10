@@ -8,7 +8,7 @@ echo "
 ║  PLEASE ENSURE THE FOLLOWING BEFORE PROCEEDING:           ║
 ║                                                           ║
 ║  1. You have time to complete the process without         ║
-║     interruption (30min - 1h)                             ║
+║     interruption                                          ║
 ║  2. IDyOMpy is cloned under codeForPaper-IDyOMpy-/        ║
 ║  3. This script is in the IDyOMpy directory and           ║
 ║     running under the IDyOMpy environment                 ║
@@ -41,11 +41,8 @@ fi
 models_dir="models"
 model_files=(
     "bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.model"
-    "bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.model"
     "mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.model"
-    "mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.model"
     "train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length.model"
-    "train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.model"
 )
 
 found_models=false
@@ -96,34 +93,6 @@ python3 App.py -t ../dataset/bach_Pearce/ -s ../dataset/train_shanxi/ &
 
 python3 App.py -t ../dataset/mixed2/ -s ../stimuli/GregoireMcGill/ &
 
-wait
-
-# IDyOMpy PPM
-
-python3 App.py -t ../dataset/train_shanxi/ -s ../dataset/bach_Pearce/ -o 1 &
-
-python3 App.py -t ../dataset/mixed2/ -s ../stimuli/GregoireMcGill/ -o 1 &
-
-python3 App.py -t ../dataset/bach_Pearce/ -s ../dataset/train_shanxi/ -o 1 &
-
-wait
-
-# IDyOMpy PPM
-
-python3 App.py -c ../dataset/bach_Pearce/ -o 1 &
-
-python3 App.py -c ../dataset/train_shanxi/ -o 1 & 
-
-python3 App.py -c ../dataset/mixed2/ -o 1 &
-
-yes N | python3 App.py -t ../dataset/mixed2/ -s ../stimuli/giovanni/ -o 1 &
-
-yes N | python3 App.py -t ../dataset/mixed2/ -s ../stimuli/Gold/ -o 1 &
-
-yes N | python3 App.py -t ../dataset/bach_Pearce/ -s ../stimuli/GregoireMcGill/ -o 1 &
-
-yes N | python3 App.py -t ../dataset/bach_Pearce/ -s ../stimuli/giovanni/ -o 1 &
-
 wait 
 
 # IDyOMpy
@@ -138,14 +107,6 @@ yes N | python3 App.py -t ../dataset/bach_Pearce/ -s ../stimuli/GregoireMcGill/ 
 
 yes N | python3 App.py -t ../dataset/bach_Pearce/ -s ../stimuli/giovanni/ &
 
-wait
-
-cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval.mat
-
-wait
-
-python3 App.py -c ../dataset/bach_Pearce/ -g 1 & # cant be put together with the above -c bach_Pearce -g 0 (default)
-
 python3 App.py -e ../dataset/bach_Pearce/ &
 
 python3 App.py -c ../dataset/train_shanxi/ &
@@ -157,35 +118,24 @@ wait
 echo "We copy the results to the benchmark_results folder..."
 
 cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_trained_on_Chinese_train.mat
-cp out/bach_Pearce/surprises/train_shanxi/data/train_shanxi_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Bach_Pearce_trained_on_Chinese_train.mat
 
-# cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval.mat
-cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Bach_Pearce_cross_eval.mat
-cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval_genuineEntropy.mat
+cp out/bach_Pearce/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Bach_Pearce_cross_eval.mat
 
 cp out/train_shanxi/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Chinese_train_cross_val.mat
-cp out/train_shanxi/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Chinese_train_cross_val.mat
 
 cp out/train_shanxi/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Chinese_train_trained_on_Bach_Pearce.mat
-cp out/train_shanxi/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Chinese_train_trained_on_Bach_Pearce.mat
 
 cp out/GregoireMcGill/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Jneurosci_trained_on_mixed2.mat
-cp out/GregoireMcGill/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Jneurosci_trained_on_mixed2.mat
 
 cp out/giovanni/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/eLife_trained_on_mixed2.mat
-cp out/giovanni/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/eLife_trained_on_mixed2.mat
 
 cp out/Gold/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Gold_trained_on_mixed2.mat
-cp out/Gold/surprises/mixed2/data/mixed2_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Gold_trained_on_mixed2.mat
 
 cp out/mixed2/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Mixed2_cross_eval.mat
-cp out/mixed2/eval/data/likelihoods_cross-eval_k_fold_5_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Mixed2_cross_eval.mat
 
 cp out/GregoireMcGill/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/Jneurosci_trained_on_bach_Pearce.mat
-cp out/GregoireMcGill/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/Jneurosci_trained_on_bach_Pearce.mat
 
 cp out/giovanni/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length.mat ../benchmark_results/idyompy/eLife_trained_on_bach_Pearce.mat
-cp out/giovanni/surprises/bach_Pearce/data/bach_Pearce_quantization_24_maxOrder_20_viewpoints_pitch_length_originalPPM.mat ../benchmark_results/idyompy_ppm/eLife_trained_on_bach_Pearce.mat
 
 cp out/bach_Pearce/evolution/bach_Pearce.mat ../benchmark_results/idyompy/evolution_Bach_Pearce.mat
 
