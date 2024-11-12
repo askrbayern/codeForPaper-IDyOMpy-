@@ -129,34 +129,62 @@ def getPitchEntropy(file):
 
 	return likelihoods
 
+# def save_IC_Entropy(file, file_out=""):
+
+# 	folder = file[:file.rfind("/")+1]
+
+# 	D = getDico(file)
+# 	likelihoods = {}
+
+# 	for melody_id in D:
+# 		tmp_surprise = []
+# 		tmp_entropy = []
+# 		for note in D[melody_id]["ic"]:
+# 			tmp_surprise.append(note)	
+
+# 		for note in D[melody_id]["entropy"]:
+# 			tmp_entropy.append(note)
+
+# 		melody_name = D[melody_id]["melody.name"][0]
+# 		melody_name = melody_name[1:melody_name.rfind(".mid")]
+# 		melody_name = melody_name.replace("-", "_")
+# 		likelihoods[melody_name] = np.array([tmp_surprise, tmp_entropy])
+
+# 		if file_out == "":
+# 			sio.savemat(file[:-3]+"mat", likelihoods)
+# 		else:
+# 			sio.savemat(file_out, likelihoods)
+
+
+# 	return likelihoods
+
+# 'ic' was not found, replaced with an average of cpitch and onset ic
 def save_IC_Entropy(file, file_out=""):
+    folder = file[:file.rfind("/")+1]
+    D = getDico(file)
+    likelihoods = {}
 
-	folder = file[:file.rfind("/")+1]
+    for melody_id in D:  
+        cpitch_surprise = np.array(D[melody_id]["cpitch.information.content"])
+        cpitch_entropy = np.array(D[melody_id]["cpitch.entropy"])
+        onset_surprise = np.array(D[melody_id]["onset.information.content"])
+        onset_entropy = np.array(D[melody_id]["onset.entropy"])
 
-	D = getDico(file)
-	likelihoods = {}
+        # Calculate sum of two viewpoints
+        tmp_surprise = cpitch_surprise + onset_surprise
+        tmp_entropy = cpitch_entropy + onset_entropy
 
-	for melody_id in D:
-		tmp_surprise = []
-		tmp_entropy = []
-		for note in D[melody_id]["ic"]:
-			tmp_surprise.append(note)	
+        melody_name = D[melody_id]["melody.name"][0]
+        melody_name = melody_name[1:melody_name.rfind(".mid")]
+        melody_name = melody_name.replace("-", "_")
+        likelihoods[melody_name] = np.array([tmp_surprise, tmp_entropy])
 
-		for note in D[melody_id]["entropy"]:
-			tmp_entropy.append(note)
+    if file_out == "":
+        sio.savemat(file[:-3]+"mat", likelihoods)
+    else:
+        sio.savemat(file_out, likelihoods)
 
-		melody_name = D[melody_id]["melody.name"][0]
-		melody_name = melody_name[1:melody_name.rfind(".mid")]
-		melody_name = melody_name.replace("-", "_")
-		likelihoods[melody_name] = np.array([tmp_surprise, tmp_entropy])
-
-		if file_out == "":
-			sio.savemat(file[:-3]+"mat", likelihoods)
-		else:
-			sio.savemat(file_out, likelihoods)
-
-
-	return likelihoods
+    return likelihoods
 
 
 # S = getSurprise("../stimuli/giovanni/surprises/13-cpitch_onset-cpitch_onset-12-nil-melody-nil-1-both-nil-t-nil-c-nil-t-t-x-3.dat")
